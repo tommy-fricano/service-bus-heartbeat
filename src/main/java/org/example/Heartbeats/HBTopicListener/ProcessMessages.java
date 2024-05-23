@@ -4,10 +4,12 @@ import com.azure.messaging.servicebus.ServiceBusClientBuilder;
 import com.azure.messaging.servicebus.ServiceBusErrorContext;
 import com.azure.messaging.servicebus.ServiceBusProcessorClient;
 import com.azure.messaging.servicebus.ServiceBusReceivedMessageContext;
+import org.springframework.beans.factory.annotation.Value;
 
 public class ProcessMessages implements Runnable {
 
-    private static final String CONNECTION_STRING = "Endpoint=sb://ngrp-dev-servicebus.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=+B1YqYZDmgBUQNIOcd9tRomBENdWcJnRM+ASbH5ElTc=";
+    @Value("${service-bus.connection-string}")
+    private static String CONNECTION_STRING;
     private static final String TOPIC_NAME = "heartbeat-topic";
     private static final String SUBSCRIPTION_NAME = "heartbeat-sub";
 

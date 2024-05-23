@@ -1,6 +1,8 @@
 package org.example.Commands.CommandTopicListener;
 
 import com.azure.messaging.servicebus.*;
+import org.springframework.beans.factory.annotation.Value;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -11,7 +13,8 @@ import java.util.concurrent.TimeUnit;
 
 public class Player {
 
-        private static final String CONNECTION_STRING = "Endpoint=sb://ngrp-dev-servicebus.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=+B1YqYZDmgBUQNIOcd9tRomBENdWcJnRM+ASbH5ElTc=";
+        @Value("${service-bus.connection-string}")
+        private static String CONNECTION_STRING;
         private static final String TOPIC_NAME = "heartbeat-topic";
         private static final String SUBSCRIPTION_NAME = "heartbeat-sub";
 

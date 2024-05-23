@@ -6,17 +6,20 @@ import com.azure.messaging.servicebus.administration.ServiceBusAdministrationCli
 import com.azure.messaging.servicebus.administration.ServiceBusAdministrationClientBuilder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 @Getter
 @Setter
 @Configuration
 public class ServiceBusClientConfig {
 
-    private String connectionString = "Endpoint=sb://ngrp-dev-servicebus.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=+B1YqYZDmgBUQNIOcd9tRomBENdWcJnRM+ASbH5ElTc=";
+    @Value("${service-bus.connection-string}")
+    private String connectionString;
     private String topic = "command-topic";
-
     @Bean
     public ServiceBusSenderClient senderClient() {
         return new ServiceBusClientBuilder()
