@@ -1,0 +1,47 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:3.2.5")
+    }
+}
+
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.2.5'
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+    implementation 'com.azure:azure-identity'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'com.azure:azure-messaging-servicebus'
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom 'com.azure.spring:spring-cloud-azure-dependencies:5.11.0'
+        mavenBom 'com.azure:azure-sdk-bom:1.2.23'
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
