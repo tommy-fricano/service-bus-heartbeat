@@ -28,13 +28,12 @@ public class CommandForwarderService {
         this.adminClient = adminClient;
     }
 
-    public void forwardMessage(String heartbeat) throws JsonProcessingException {
-        JsonNode heartbeatNode = objectMapper.readTree(heartbeat);
-        System.out.println(heartbeat);
-        String storeId = heartbeatNode.get("playerCode").asText().split("-")[1];
-        String playerNum = heartbeatNode.get("playerCode").asText().split("-")[2];
+    public void forwardMessage(String command) throws JsonProcessingException {
+        JsonNode commandNode = objectMapper.readTree(command);
+        String storeId = commandNode.get("playerCode").asText().split("-")[1];
+        String playerNum = commandNode.get("playerCode").asText().split("-")[2];
 
-        ServiceBusMessage serviceBusMessage = new ServiceBusMessage(heartbeat)
+        ServiceBusMessage serviceBusMessage = new ServiceBusMessage(command)
                 .setSubject("Command")
                 .setSessionId(storeId);
 

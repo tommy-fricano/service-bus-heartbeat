@@ -1,8 +1,10 @@
 package org.example.Commands.CommandTopicListener;
 
 import com.azure.messaging.servicebus.*;
+import okhttp3.*;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -20,30 +22,31 @@ public class Player {
 
         public static void main(String[] args) {
 
-            ServiceBusSenderClient senderClient = new ServiceBusClientBuilder()
-                    .connectionString(CONNECTION_STRING)
-                    .sender()
-                    .topicName(TOPIC_NAME)
-                    .buildClient();
-
             String storeId = "404111";
-            String playerCode = "us-" + storeId + "-500";
+            String playerCode = "uswest-" + storeId + "-500";
             String jsonMessage = "{\"playerCode\": \"" + playerCode + "\", \"timestamp\": \"" + System.currentTimeMillis() + "\"}";
 
-            ServiceBusMessage serviceBusMessage = new ServiceBusMessage(jsonMessage)
-                    .setSubject("Heartbeat")
-                    .setSessionId(storeId);
+            MediaType JSON = MediaType.get("application/json; charset=utf-8");
+
+            RequestBody body = RequestBody.create(jsonMessage, JSON);
+
+            OkHttpClient client = new OkHttpClient();
+
+            Request request = new Request.Builder()
+                    .url("http://localhost:8080/heartbeat")
+                    .post(body)
+                    .build();
 
             ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
-            executorService.scheduleAtFixedRate(() -> senderClient.sendMessage(serviceBusMessage), 0, 5, TimeUnit.SECONDS);
+            executorService.scheduleAtFixedRate(() -> {
+                try {
+                    client.newCall(request).execute();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }, 0, 5, TimeUnit.SECONDS);
 
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                System.out.println("Shutting down...");
-                executorService.shutdown();
-                senderClient.close();
-                System.exit(0);
-            }));
 
 //            ServiceBusProcessorClient processorClient = new ServiceBusClientBuilder()
 //                    .connectionString(CONNECTION_STRING)

@@ -1,4 +1,4 @@
-package org.example.Heartbeats.HBTopicListener;
+package org.example.Heartbeats.portal;
 
 import com.azure.messaging.servicebus.ServiceBusClientBuilder;
 import com.azure.messaging.servicebus.ServiceBusErrorContext;
@@ -11,7 +11,7 @@ public class ProcessMessages implements Runnable {
     @Value("${service-bus.connection-string}")
     private static String CONNECTION_STRING;
     private static final String TOPIC_NAME = "heartbeat-topic";
-    private static final String SUBSCRIPTION_NAME = "heartbeat-sub";
+    private static final String SUBSCRIPTION_NAME = "heartbeat-sub-useast";
 
     public ProcessMessages(){}
 
