@@ -1,0 +1,31 @@
+<configuration>
+    <appender name="SLF4J_FILE" class="ch.qos.logback.core.FileAppender">
+        <file>slf4j.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%date %level [%thread] %logger{10} [%file:%line] %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Redirect SLF4J logs to the SLF4J_FILE appender -->
+    <logger name="org.slf4j" level="ERROR">
+        <appender-ref ref="SLF4J_FILE"/>
+    </logger>
+    <logger name="org.slf4j" level="ERROR"/>
+
+    <!-- Disable console output completely -->
+<!--    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">-->
+<!--        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">-->
+<!--            <level>ALL</level>-->
+<!--        </filter>-->
+<!--    </appender>-->
+
+    <!-- Turn off all logging for root and specific packages -->
+    <root level="SEVERE">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+    <logger name="com.azure" level="OFF"/>
+    <logger name="com.azure.messaging.servicebus" level="OFF"/>
+    <logger name="com.azure.core.amqp" level="OFF"/>
+</configuration>

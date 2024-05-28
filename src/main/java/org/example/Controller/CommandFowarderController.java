@@ -1,7 +1,7 @@
-package org.example.Commands.CommandForwarder.Controller;
+package org.example.Controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.example.Commands.CommandForwarder.Service.CommandForwarderService;
+import org.example.Service.CommandForwarderService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;

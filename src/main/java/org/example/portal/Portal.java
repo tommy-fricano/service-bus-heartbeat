@@ -1,9 +1,11 @@
-package org.example.Heartbeats.portal;
+package org.example.portal;
 
 
 import okhttp3.*;
 
 import java.util.Scanner;
+
+import static org.example.portal.ProcessMessages.heartbeats;
 
 public class Portal {
 
@@ -11,16 +13,19 @@ public class Portal {
 
         ProcessMessages processMessages = new ProcessMessages();
 
-//        Thread thread = new Thread(processMessages);
-//        thread.start();
+        Thread thread = new Thread(processMessages);
+        thread.start();
 
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
+            System.out.println();
             System.out.println("Enter an option: \n1.Read heartbeats\n2.Send command\n3.Quit");
             int input = scanner.nextInt();
             if (input == 1) {
-
+                for(String messsage: heartbeats){
+                    System.out.println(messsage);
+                }
             } else if (input == 2) {
                 System.out.println("Enter the storeId: ");
                 String storeId = scanner.next();

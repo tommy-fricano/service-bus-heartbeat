@@ -1,7 +1,7 @@
-package org.example.Heartbeats.Forwarder.Controller;
+package org.example.Controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.example.Heartbeats.Forwarder.Service.HeartbeatForwarderService;
+import org.example.Service.HeartbeatForwarderService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;

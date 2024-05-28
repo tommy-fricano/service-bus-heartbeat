@@ -1,4 +1,4 @@
-package org.example.Commands.CommandForwarder.Service;
+package org.example.Service;
 
 import com.azure.messaging.servicebus.ServiceBusMessage;
 import com.azure.messaging.servicebus.ServiceBusSenderClient;
@@ -22,9 +22,9 @@ public class CommandForwarderService {
     private final String CommandTopic = "command-topic";
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public CommandForwarderService(ServiceBusSenderClient senderClient,
+    public CommandForwarderService(ServiceBusSenderClient commandSenderClient,
                                    ServiceBusAdministrationClient adminClient) {
-        this.senderClient = senderClient;
+        this.senderClient = commandSenderClient;
         this.adminClient = adminClient;
     }
 
@@ -39,7 +39,7 @@ public class CommandForwarderService {
 
         Map<String, Object> properties = serviceBusMessage.getApplicationProperties();
         properties.put("storeId", "player-" + storeId);
-        properties.put("player", storeId+ "-"+ playerNum);
+        properties.put("player", storeId+ "-" + playerNum);
 
         createTopicAndSubIfNoneExist(storeId, playerNum);
 
@@ -57,7 +57,7 @@ public class CommandForwarderService {
             adminClient.createSubscription(CommandTopic, storeTopicName,
                     new CreateSubscriptionOptions().setForwardTo(storeTopicName));
             adminClient.createRule(CommandTopic, "store-filter", storeTopicName,
-                    new CreateRuleOptions(new SqlRuleFilter(format("storeId LIKE 'player-%s%%'", storeTopicName))));
+                    new CreateRuleOptions(new SqlRuleFilter(format("storeId LIKE '%s%%'", storeTopicName))));
             adminClient.deleteRule(CommandTopic, storeTopicName, "$Default");
         }
         if (!adminClient.getSubscriptionExists(storeTopicName, subName)) {

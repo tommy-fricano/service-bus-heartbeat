@@ -1,4 +1,4 @@
-package org.example.Heartbeats.Forwarder.Service;
+package org.example.Service;
 
 import com.azure.messaging.servicebus.ServiceBusMessage;
 import com.azure.messaging.servicebus.ServiceBusSenderClient;
@@ -8,23 +8,23 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PreDestroy;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
-import static java.lang.String.format;
-
 @Service
 public class HeartbeatForwarderService {
 
-    private final ServiceBusSenderClient senderClient;
+    private final ServiceBusSenderClient heartbeatSenderClient;
     private final ServiceBusAdministrationClient adminClient;
     private final String HeartbeatTopic = "heartbeat-topic";
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public HeartbeatForwarderService(ServiceBusSenderClient senderClient,
+    @Autowired
+    public HeartbeatForwarderService(ServiceBusSenderClient heartbeatSenderClient,
                                      ServiceBusAdministrationClient adminClient) {
-        this.senderClient = senderClient;
+        this.heartbeatSenderClient = heartbeatSenderClient;
         this.adminClient = adminClient;
     }
 
@@ -42,7 +42,7 @@ public class HeartbeatForwarderService {
 
         createSubIfNoneExist(tenant);
 
-        senderClient.sendMessage(serviceBusMessage);
+        heartbeatSenderClient.sendMessage(serviceBusMessage);
     }
 
     private void createSubIfNoneExist(String tenant) {
@@ -56,8 +56,8 @@ public class HeartbeatForwarderService {
     @PreDestroy
     public void cleanup() {
         // Close the Service Bus Sender client when the application is shutting down
-        if (senderClient != null) {
-            senderClient.close();
+        if (heartbeatSenderClient != null) {
+            heartbeatSenderClient.close();
         }
     }
 }

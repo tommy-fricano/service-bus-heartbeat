@@ -1,14 +1,14 @@
-package org.example.Heartbeats.Forwarder;
+package org.example;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 @SpringBootApplication
-public class HeartbeatMain {
+public class HeartbeatForwarderMain {
 
     public static void main(String[] args) {
-        SpringApplication.run(HeartbeatMain.class, args);
+        SpringApplication.run(HeartbeatForwarderMain.class, args);
     }
 
 }

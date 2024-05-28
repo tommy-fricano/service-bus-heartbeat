@@ -1,15 +1,15 @@
-package org.example.Commands.CommandForwarder;
+package org.example;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 @SpringBootApplication
-public class CommandMain {
+public class CommandForwarderMain {
 
 
     public static void main(String[] args) {
-        SpringApplication.run(CommandMain.class, args);
+        SpringApplication.run(CommandForwarderMain.class, args);
     }
 
 }

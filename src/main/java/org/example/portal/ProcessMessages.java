@@ -1,24 +1,27 @@
-package org.example.Heartbeats.portal;
+package org.example.portal;
 
 import com.azure.messaging.servicebus.ServiceBusClientBuilder;
 import com.azure.messaging.servicebus.ServiceBusErrorContext;
 import com.azure.messaging.servicebus.ServiceBusProcessorClient;
 import com.azure.messaging.servicebus.ServiceBusReceivedMessageContext;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+@NoArgsConstructor
 public class ProcessMessages implements Runnable {
-
-    @Value("${service-bus.connection-string}")
-    private static String CONNECTION_STRING;
+    //      todo make sure to add connection string manually
     private static final String TOPIC_NAME = "heartbeat-topic";
-    private static final String SUBSCRIPTION_NAME = "heartbeat-sub-useast";
-
-    public ProcessMessages(){}
+    private static final String SUBSCRIPTION_NAME = "heartbeat-sub-uswest";
+    protected static List<String> heartbeats = Collections.synchronizedList(new ArrayList<>());
 
     @Override
     public void run() {
+
         ServiceBusProcessorClient processorClient = new ServiceBusClientBuilder()
-                .connectionString(CONNECTION_STRING)
+                .connectionString(connectionString)
                 .processor()
                 .topicName(TOPIC_NAME)
                 .subscriptionName(SUBSCRIPTION_NAME)
@@ -38,9 +41,7 @@ public class ProcessMessages implements Runnable {
     }
 
     private static void processMessage(ServiceBusReceivedMessageContext context) {
-        System.out.printf("Received message: Sequence #: %s. Contents: %s%n",
-                context.getMessage().getSequenceNumber(),
-                context.getMessage().getBody().toString());
+        heartbeats.add(context.getMessage().getBody().toString());
 
         context.complete();
     }
